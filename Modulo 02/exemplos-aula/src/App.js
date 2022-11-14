@@ -1,21 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Main from "./components/Main"
 import TextInput from "./components/TextInput";
 import DateInput from "./components/DateInput";
 import getAgeFrom from "./helpers/DateHelpers";
-
+import Timer from "./components/Timer";
+import CheckboxInput from "./components/CheckboxInput";
 
 export default function App() {
   const [name, setName] = useState('Murillo Filho');
   const [birthDate, setBirthDate] = useState('Murillo Filho');
+  const [showTimer, setShowTimer] = useState(false);
 
+  useEffect(() => {
+    document.title = name;
+  }, [name])
+
+  function toogleShowTimer() {
+    setShowTimer(currentShowTimer => !currentShowTimer);
+  }
   function handerNameChange(newName) {
     setName(newName);
-  }
+  };
 
   function handerBirthDateChange(newBirthDate) {
-    console.log(newBirthDate);
     setBirthDate(newBirthDate);
   }
   return (
@@ -25,11 +33,26 @@ export default function App() {
       </Header>
 
       <Main>
+        {
+          showTimer &&
+          (
+            <div className="text-right mt-1">
+              <Timer />
+            </div>
+          )
+        }
+
+
         <TextInput
           id="textInput"
           labelInput="Digite o seu nome:"
           inputValue={name}
           onInputChange={handerNameChange} />
+
+        <CheckboxInput 
+        id="checkboxInput"
+        labelDescription="Mostrar cronômetro"
+        onChackboxChange={toogleShowTimer}/>
 
         <DateInput
           id="dateInput"
