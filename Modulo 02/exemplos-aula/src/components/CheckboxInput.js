@@ -5,10 +5,9 @@ export default function CheckboxInput({
     id,
     autoFocus = false }) {
 
-    function handleInputChange({ currentTarget }) {
+    function handleInputChange() {
         if (onChackboxChange) {
-            const newValue = currentTarget.value;
-            onChackboxChange(newValue);
+            onChackboxChange();
         }
     }
     return (

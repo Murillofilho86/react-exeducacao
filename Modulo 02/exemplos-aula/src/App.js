@@ -6,11 +6,34 @@ import DateInput from "./components/DateInput";
 import getAgeFrom from "./helpers/DateHelpers";
 import Timer from "./components/Timer";
 import CheckboxInput from "./components/CheckboxInput";
+import OnlineOffline from "./components/OnlineOffline";
 
 export default function App() {
   const [name, setName] = useState('Murillo Filho');
   const [birthDate, setBirthDate] = useState('Murillo Filho');
   const [showTimer, setShowTimer] = useState(false);
+  const [online, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    function toggleIsOnline() {
+      setIsOnline(true);
+    }
+
+    function toggleIsOffline() {
+      setIsOnline(false);
+    }
+
+
+    window.addEventListener('online', toggleIsOnline);
+    window.addEventListener('offline', toggleIsOffline);
+
+    return () => {
+      window.removeEventListener('online', toggleIsOnline);
+      window.removeEventListener('offline', toggleIsOffline)
+    }
+
+  }, []);
+
 
   useEffect(() => {
     document.title = name;
@@ -27,16 +50,17 @@ export default function App() {
     setBirthDate(newBirthDate);
   }
   return (
-    <div>
+    <>
       <Header>
         Casa
       </Header>
 
+      <OnlineOffline isOnline={online} />
       <Main>
         {
           showTimer &&
           (
-            <div className="text-right mt-1">
+            <div className="text-right mt-5">
               <Timer />
             </div>
           )
@@ -49,10 +73,10 @@ export default function App() {
           inputValue={name}
           onInputChange={handerNameChange} />
 
-        <CheckboxInput 
-        id="checkboxInput"
-        labelDescription="Mostrar cronômetro"
-        onChackboxChange={toogleShowTimer}/>
+        <CheckboxInput
+          id="checkboxInput"
+          labelDescription="Mostrar cronômetro"
+          onChackboxChange={toogleShowTimer} />
 
         <DateInput
           id="dateInput"
@@ -64,7 +88,7 @@ export default function App() {
         </p>
       </Main>
 
-    </div>
+    </>
   );
 }
 
